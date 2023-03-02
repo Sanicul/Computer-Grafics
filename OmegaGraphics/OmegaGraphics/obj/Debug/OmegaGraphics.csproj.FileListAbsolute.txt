@@ -1,0 +1,11 @@
+D:\Main\Programming\C++\OmegaGraphics\OmegaGraphics\bin\Debug\OmegaGraphics.exe.config
+D:\Main\Programming\C++\OmegaGraphics\OmegaGraphics\bin\Debug\OmegaGraphics.exe
+D:\Main\Programming\C++\OmegaGraphics\OmegaGraphics\bin\Debug\OmegaGraphics.pdb
+D:\Main\Programming\C++\OmegaGraphics\OmegaGraphics\obj\Debug\OmegaGraphics.csproj.AssemblyReference.cache
+D:\Main\Programming\C++\OmegaGraphics\OmegaGraphics\obj\Debug\OmegaGraphics.csproj.SuggestedBindingRedirects.cache
+D:\Main\Programming\C++\OmegaGraphics\OmegaGraphics\obj\Debug\OmegaGraphics.Form1.resources
+D:\Main\Programming\C++\OmegaGraphics\OmegaGraphics\obj\Debug\OmegaGraphics.Properties.Resources.resources
+D:\Main\Programming\C++\OmegaGraphics\OmegaGraphics\obj\Debug\OmegaGraphics.csproj.GenerateResource.cache
+D:\Main\Programming\C++\OmegaGraphics\OmegaGraphics\obj\Debug\OmegaGraphics.csproj.CoreCompileInputs.cache
+D:\Main\Programming\C++\OmegaGraphics\OmegaGraphics\obj\Debug\OmegaGraphics.exe
+D:\Main\Programming\C++\OmegaGraphics\OmegaGraphics\obj\Debug\OmegaGraphics.pdb

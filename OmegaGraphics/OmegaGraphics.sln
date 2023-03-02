@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32505.173
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmegaGraphics", "OmegaGraphics\OmegaGraphics.csproj", "{FC072C35-77CF-4015-B88F-C81E5C12C3ED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FC072C35-77CF-4015-B88F-C81E5C12C3ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC072C35-77CF-4015-B88F-C81E5C12C3ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC072C35-77CF-4015-B88F-C81E5C12C3ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC072C35-77CF-4015-B88F-C81E5C12C3ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {95EB8B17-EF1C-48F3-A687-10B05774F626}
+	EndGlobalSection
+EndGlobal
