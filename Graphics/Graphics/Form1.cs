@@ -43,11 +43,16 @@ namespace Graf
             {
                 IsLocalasingPoint = true;
                 Path.Clear();
+                button1.Text = "Localisation";
+                return;
             }
 
             if (IsLocalasingPoint == true)
             {
                 IsLocalasingPoint = false;
+                Path.Clear();
+                button1.Text = "Moving";
+                return;
             }
 
         }
@@ -70,7 +75,11 @@ namespace Graf
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-                Path.Add(e.Location);
+                if(Path.Count() < 3 || IsLocalasingPoint == false)
+                {
+                    Path.Add(e.Location);
+                }
+            
 
             if (e.Button == MouseButtons.Right)
             {
@@ -96,6 +105,16 @@ namespace Graf
             {
                 Path[ind] = new Point(e.X, e.Y);
             }
+        }
+
+        private bool Localising(Point Q)
+        {
+            Point A = Path[0];
+            Point B = Path[1];
+            Point C = Path[2];
+
+            int Determinant = A.X * B.Y + B.X * C.Y + C.X * A.Y - C.X * B.Y - B.X * A.Y - A.X * C.Y;
+            int MinorA
         }
     }
 }
