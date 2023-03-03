@@ -100,9 +100,12 @@ namespace Graf
 
         private void button2_Click(object sender, EventArgs e)
         {
+            ShowSquare = false;
+            if (IsRotatingPath) button3_Click(sender, e);
+            if (IsMovingSquare) button5_Click(sender, e);
+            if (IsRotatingSquare) button6_Click(sender, e);
             Path.Clear();
             LocalisationPoints.Clear();
-            ShowSquare = false;
             Square.Clear();
         }
         private bool Localising(PointF Q)
@@ -224,7 +227,7 @@ namespace Graf
             if(IsRotatingPath == true)
             {
                 IsRotatingPath = false;
-                button3.Text = "Continue Rotating";
+                button3.Text = "Rotate";
                 return;
             }
         }
@@ -297,7 +300,7 @@ namespace Graf
             if (IsMovingSquare == true)
             {
                 IsMovingSquare = false;
-                button5.Text = "Continue Movement";
+                button5.Text = "Move Square";
                 return;
             }
         }
@@ -307,14 +310,14 @@ namespace Graf
             if (IsRotatingSquare == false)
             {
                 IsRotatingSquare = true;
-                button6.Text = "Stop Rotating";
+                button6.Text = "Stop Rotating Square";
                 return;
             }
 
             if (IsRotatingSquare == true)
             {
                 IsRotatingSquare = false;
-                button6.Text = "Continue Rotating";
+                button6.Text = "Rotate Square";
                 return;
             }
         }
