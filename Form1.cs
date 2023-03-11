@@ -8,54 +8,34 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Graf
+namespace BezierSurname
 {
     public partial class Form1 : Form
     {
-        Timer RefreshTimer = new Timer();
-        List<PointF> Path = new List<PointF>();
+
         Graphics Gr;
-        int ind = -1;
-        const int SizeofPoint = 9;
-        bool IsLocalasingPoint = false;
-        bool IsRotatingPath = false;
-        bool IsRotatingSquare = false;
-        bool IsMovingSquare = false;
-        bool ShowSquare = false;
-        float RotationAngleOfSquare = 10;
-        float RotationAngleOfPath = 10;
-        List<PointF> Square = new List<PointF>();
-        List<PointF> LocalisationPoints = new List<PointF>();
-        float SideOfSquare = 40;
-        float t = 0;
-        int i = 0;
-        float MovingSpeed = 10;
+        Timer RefreshTimer = new Timer();
 
+        List<PointF> Path = new List<PointF>();
+        List<PointF> DrawnBezier = new List<PointF>();
 
+        const int SizeofPoint = 8;
+        const int RefreshTime = 100;
+
+        bool IsShowingStruct = true;
+
+        int IndexOfStartingPoint = 0;
+        int MovingPointIndex = -1;
         public Form1()
         {
             InitializeComponent();
-        }
-
-        private void SetSquare(float CoordX, float CoordY)
-        {
-            //if (Square.Count != 0) return;
-            Square.Add(new PointF(CoordX - SideOfSquare / 2, CoordY - SideOfSquare / 2));
-            Square.Add(new PointF(CoordX - SideOfSquare / 2, CoordY + SideOfSquare / 2));
-            Square.Add(new PointF(CoordX + SideOfSquare / 2, CoordY + SideOfSquare / 2));
-            Square.Add(new PointF(CoordX + SideOfSquare / 2, CoordY - SideOfSquare / 2));
-        }
-
-        private void DrawSquare()
-        {
-            Gr.DrawPolygon(new Pen(Color.DarkMagenta, 4), Square.ToArray());
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             Gr = CreateGraphics();
 
-            RefreshTimer.Interval = (100);
+            RefreshTimer.Interval = (RefreshTime);
             RefreshTimer.Tick += new EventHandler(RefreshTick);
             RefreshTimer.Start();
         }
@@ -63,123 +43,32 @@ namespace Graf
         private void RefreshTick(object sender, EventArgs e)
         {
             Refresh();
-            if (IsRotatingPath)
-            {
-                Rotate(Path, RotationAngleOfPath);
-                MoveSquare(Square);
-            }
-            if(IsMovingSquare) MoveSquare(Square);
-            if(IsRotatingSquare) Rotate(Square, RotationAngleOfSquare);
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (IsLocalasingPoint == false)
-            {
-                IsLocalasingPoint = true;
-                Path.Clear();
-                ShowSquare = false;
-                button4.Text = "Show Square";
-                Square.Clear();
-                button1.Text = "Localisation";
-                return;
-            }
-
-            if (IsLocalasingPoint == true)
-            {
-                IsLocalasingPoint = false;
-                Path.Clear();
-                ShowSquare = false;
-                button4.Text = "Show Square";
-                Square.Clear();
-                button1.Text = "Moving";
-                return;
-            }
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            ShowSquare = false;
-            if (IsRotatingPath) button3_Click(sender, e);
-            if (IsMovingSquare) button5_Click(sender, e);
-            if (IsRotatingSquare) button6_Click(sender, e);
-            Path.Clear();
-            LocalisationPoints.Clear();
-            Square.Clear();
-        }
-        private bool Localising(PointF Q)
-        {
-            if (Path.Count < 3) return false;
-            PointF A = Path[0];
-            PointF B = Path[1];
-            PointF C = Path[2];
-
-            bool Determinant = (A.X * B.Y + B.X * C.Y + C.X * A.Y - C.X * B.Y - B.X * A.Y - A.X * C.Y > 0);
-            bool MinorA = (Q.X * B.Y + B.X * C.Y + C.X * Q.Y - C.X * B.Y - B.X * Q.Y - Q.X * C.Y > 0);
-            if (Determinant != MinorA) return false;
-            bool MinorB = (A.X * Q.Y + Q.X * C.Y + C.X * A.Y - C.X * Q.Y - Q.X * A.Y - A.X * C.Y > 0);
-            if (Determinant != MinorB) return false;
-            bool MinorC = (A.X * B.Y + B.X * Q.Y + Q.X * A.Y - Q.X * B.Y - B.X * A.Y - A.X * Q.Y > 0);
-            if (Determinant != MinorC) return false;
-
-            return true;
-        }
-
-        private void Form1_Paint(object sender, PaintEventArgs e)
-        {
-            Gr.Clear(Color.White);
-            if (ShowSquare == true) DrawSquare();
-            if(Path.Count > 2)
-                Gr.DrawPolygon(new Pen(Color.DarkCyan, 3), Path.ToArray());
-            Path.ForEach(point => Gr.FillRectangle(Brushes.LightSkyBlue, point.X - SizeofPoint / 2, point.Y - SizeofPoint / 2, SizeofPoint, SizeofPoint));
-            Path.ForEach(point => Gr.DrawRectangle(new Pen(Color.Black, 1), point.X - SizeofPoint / 2, point.Y - SizeofPoint / 2, SizeofPoint, SizeofPoint));
-            
-            if(IsLocalasingPoint)
-            {
-                for (int i = 0; i < LocalisationPoints.Count; i++)
-                {
-                    PointF point = LocalisationPoints[i];
-                    if (Localising(LocalisationPoints[i]))
-                    {
-                        Gr.FillRectangle(Brushes.Green, point.X - SizeofPoint / 2, point.Y - SizeofPoint / 2, SizeofPoint, SizeofPoint);
-                        Gr.DrawRectangle(new Pen(Color.Black, 1), point.X - SizeofPoint / 2, point.Y - SizeofPoint / 2, SizeofPoint, SizeofPoint);
-                    }
-                    else
-                    {
-                        Gr.FillRectangle(Brushes.Red, point.X - SizeofPoint / 2, point.Y - SizeofPoint / 2, SizeofPoint, SizeofPoint);
-                        Gr.DrawRectangle(new Pen(Color.Black, 1), point.X - SizeofPoint / 2, point.Y - SizeofPoint / 2, SizeofPoint, SizeofPoint);
-                    }
-                }
-            }
-        }
-
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (IsRotatingPath == true) return;
             if (e.Button == MouseButtons.Left)
             {
-                if (Path.Count() < 3 || IsLocalasingPoint == false)
+                Path.Add(e.Location);
+                if (Path.Count() == 4)
+                    for (int i = 0; i < 4; i++)
+                        DrawnBezier.Add(Path[i]);
+
+                if (DrawnBezier.Count < Path.Count() && (Path.Count() - 1) % 3 == 0 && Path.Count() > 4)
                 {
-                    Path.Add(e.Location);
-                } 
-                else
-                {
-                    LocalisationPoints.Add(e.Location);
+                    for (int i = DrawnBezier.Count(); i < Path.Count(); i++)
+                        DrawnBezier.Add(Path[i]);
                 }
-
             }
-            
 
-            if (e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right && IsShowingStruct)
             {
-                ind = -1;
+                MovingPointIndex = -1;
                 for (int i = 0; i < Path.Count; i++)
                 {
                     if ((e.X > Path[i].X - SizeofPoint - 2) & (e.X < Path[i].X + SizeofPoint + 2) & (e.Y > Path[i].Y - SizeofPoint + 2) & (e.Y < Path[i].Y + SizeofPoint + 2))
                     {
-                        ind = i;
+                        MovingPointIndex = i;
                     }
                 }
             }
@@ -187,139 +76,62 @@ namespace Graf
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
         {
-             ind = -1;
+            MovingPointIndex = -1;
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right && ind != -1)
+            if (e.Button == MouseButtons.Right && MovingPointIndex != -1)
             {
-                Path[ind] = new PointF(e.X, e.Y);
+                Path[MovingPointIndex] = new PointF(e.X, e.Y);
+                DrawnBezier[MovingPointIndex] = new PointF(e.X, e.Y);
             }
         }
 
-
-
-        private void Rotate(List<PointF> PointsToRotate, Double AngleOfRotation)
+        private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            PointF Center = FindCenter(PointsToRotate);
-
-            for (int i = 0; i < PointsToRotate.Count; i++)
+            Gr.Clear(Color.White);
+            if (DrawnBezier.Count() > 3)
             {
-                PointF point = PointsToRotate[i];
-                double CoordinateX = (point.X - Center.X) * Math.Cos(AngleOfRotation * Math.PI / 180) -
-                (point.Y - Center.Y) * Math.Sin(AngleOfRotation * Math.PI / 180) + Center.X;
-                double CoordinateY = (point.X - Center.X) * Math.Sin(AngleOfRotation * Math.PI / 180) +
-                (point.Y - Center.Y) * Math.Cos(AngleOfRotation * Math.PI / 180) + Center.Y;
-                PointsToRotate[i] = new PointF((float)CoordinateX, (float)CoordinateY);
+                 Gr.DrawBeziers(new Pen(Color.DarkSlateBlue, 4), DrawnBezier.ToArray());
+
+            } 
+            if (IsShowingStruct) 
+                for(int i = 0; i < Path.Count() - 1; i++)
+                {
+                    Gr.DrawLine(new Pen(Color.Red, 1), Path[i], Path[i + 1]);
+                }
+
+            if (IsShowingStruct)
+            {
+                Path.ForEach(point => Gr.FillEllipse(Brushes.Red, point.X - SizeofPoint / 2, point.Y - SizeofPoint / 2, SizeofPoint, SizeofPoint));
+                Path.ForEach(point => Gr.DrawEllipse(new Pen(Color.Black, 1), point.X - SizeofPoint / 2, point.Y - SizeofPoint / 2, SizeofPoint, SizeofPoint));
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void Struct_Click(object sender, EventArgs e)
         {
-            if (IsRotatingPath == false)
+            if (IsShowingStruct == true)
             {
-                IsRotatingPath = true;
-                button3.Text = "Stop Rotating";
+                IsShowingStruct = false;
+                Struct.Text = "Show Structure";
                 return;
             }
 
-            if(IsRotatingPath == true)
+            if (IsShowingStruct == false)
             {
-                IsRotatingPath = false;
-                button3.Text = "Rotate";
-                return;
-            }
-        }
-
-        private void MoveSquare(List<PointF> PointsToMove)
-        {
-            if (Path.Count() == 0) return;
-            PointF Vector = new PointF(Path[(i + 1) % Path.Count()].X - Path[i].X, Path[(i + 1) % Path.Count()].Y - Path[i].Y);
-            float Distance = (float)Math.Sqrt(Vector.X * Vector.X + Vector.Y * Vector.Y);
-            PointF newP = new PointF(Path[i].X * (1 - t) + Path[(i + 1) % Path.Count()].X * t, Path[i].Y * (1 - t) + Path[(i + 1) % Path.Count()].Y * t);
-            
-            if(IsMovingSquare)
-                t += 1 * MovingSpeed / Distance;
-
-            if (t >= 1)
-            {
-                i++;
-                if (i >= Path.Count()) i = 0;
-                t = 0;
-            }
-
-            PointF Center = FindCenter(PointsToMove);
-
-            for (int i = 0; i < Square.Count; i++)
-            {
-                Square[i] = new PointF((Square[i].X - Center.X) + newP.X, (Square[i].Y - Center.Y) + newP.Y);
-            }
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            if (ShowSquare == false)
-            {
-                ShowSquare = true;
-                button4.Text = "Show Square";
-                if(Square.Count() == 0)
-                if (Path.Count > 0) SetSquare(Path[0].X, Path[0].Y);//&&&&&&
-                else SetSquare(800, 300);
-                return;
-            }
-
-            if (ShowSquare == true)
-            {
-                ShowSquare = false;
-                button4.Text = "Hide Square";
-                Square.Clear();
+                IsShowingStruct = true;
+                Struct.Text = "Hide Structure";
                 return;
             }
         }
 
-        private PointF FindCenter(List<PointF> Polygon)
+        private void Clear_Click(object sender, EventArgs e)
         {
-            float CenterX = 0;
-            float CenterY = 0;
-            Polygon.ForEach(point => { CenterX += point.X; CenterY += point.Y; });
-            PointF Center = new PointF(CenterX / Polygon.Count, CenterY / Polygon.Count);
-            return Center;
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-
-            if (IsMovingSquare == false)
-            {
-                IsMovingSquare = true;
-                button5.Text = "Stop Movement";
-                return;
-            }
-
-            if (IsMovingSquare == true)
-            {
-                IsMovingSquare = false;
-                button5.Text = "Move Square";
-                return;
-            }
-        }
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            if (IsRotatingSquare == false)
-            {
-                IsRotatingSquare = true;
-                button6.Text = "Stop Rotating Square";
-                return;
-            }
-
-            if (IsRotatingSquare == true)
-            {
-                IsRotatingSquare = false;
-                button6.Text = "Rotate Square";
-                return;
-            }
+            Path.Clear();
+            DrawnBezier.Clear();
+            IsShowingStruct = true;
+            Struct.Text = "Hide Structure";
         }
     }
 }
