@@ -20,13 +20,13 @@ namespace BezierSurname
         List<PointF> DrawnBezier = new List<PointF>();
 
         const int SizeofPoint = 8;
-        const int SizeofBezierPoint = 12;
+        const int SizeofBezierPoint = 10;
         const int RefreshTime = 100;
 
         bool IsShowingStruct = true;
+        bool IsShowingBezierHelp = true;
 
         int LastAddedPoint = -1;
-        int IndexOfStartingPoint = 0;
         int MovingPointIndex = -1;
         public Form1()
         {
@@ -131,8 +131,11 @@ namespace BezierSurname
                 }
                 else
                 {
-                    DrawnBezier[(3 * MovingPointIndex - 1) / 2] = new PointF((float)1 / 3 * Path[MovingPointIndex - 1].X + (float)2 / 3 * Path[MovingPointIndex].X, ((float)1 / 3) * Path[MovingPointIndex - 1].Y + ((float)2 / 3) * Path[MovingPointIndex].Y);
-                    DrawnBezier[(3 * MovingPointIndex + 1) / 2] = new PointF((float)2 / 3 * Path[MovingPointIndex].X + (float)1 / 3 * Path[MovingPointIndex + 1].X, ((float)2 / 3) * Path[MovingPointIndex].Y + ((float)1 / 3) * Path[MovingPointIndex + 1].Y);
+                    if (MovingPointIndex != Path.Count() - 1)
+                    {
+                        DrawnBezier[(3 * MovingPointIndex - 1) / 2] = new PointF((float)1 / 3 * Path[MovingPointIndex - 1].X + (float)2 / 3 * Path[MovingPointIndex].X, ((float)1 / 3) * Path[MovingPointIndex - 1].Y + ((float)2 / 3) * Path[MovingPointIndex].Y);
+                        DrawnBezier[(3 * MovingPointIndex + 1) / 2] = new PointF((float)2 / 3 * Path[MovingPointIndex].X + (float)1 / 3 * Path[MovingPointIndex + 1].X, ((float)2 / 3) * Path[MovingPointIndex].Y + ((float)1 / 3) * Path[MovingPointIndex + 1].Y);
+                    }
                 }
             }
         }
@@ -142,20 +145,23 @@ namespace BezierSurname
             e.Graphics.Clear(Color.White);
             if (DrawnBezier.Count() > 3)
             {
-                 e.Graphics.DrawBeziers(new Pen(Color.DarkSlateBlue, 4), DrawnBezier.ToArray());
+                 e.Graphics.DrawBeziers(new Pen(Color.DarkSlateBlue, 6), DrawnBezier.ToArray());
 
             } 
             if (IsShowingStruct) 
                 for(int i = 0; i < Path.Count() - 1; i++)
                 {
-                    e.Graphics.DrawLine(new Pen(Color.Red, 1), Path[i], Path[i + 1]);
+                    e.Graphics.DrawLine(new Pen(Color.Green, 1), Path[i], Path[i + 1]);
                 }
 
             if (IsShowingStruct)
             {
-                DrawnBezier.ForEach(point => e.Graphics.FillRectangle(Brushes.Blue, point.X - SizeofBezierPoint / 2, point.Y - SizeofBezierPoint / 2, SizeofBezierPoint, SizeofBezierPoint));
-                DrawnBezier.ForEach(point => e.Graphics.DrawRectangle(new Pen(Color.Black, 1), point.X - SizeofBezierPoint / 2, point.Y - SizeofBezierPoint / 2, SizeofBezierPoint, SizeofBezierPoint));
-                Path.ForEach(point => e.Graphics.FillEllipse(Brushes.Red, point.X - SizeofPoint / 2, point.Y - SizeofPoint / 2, SizeofPoint, SizeofPoint));
+                if (IsShowingBezierHelp)
+                {
+                    DrawnBezier.ForEach(point => e.Graphics.FillRectangle(Brushes.Blue, point.X - SizeofBezierPoint / 2, point.Y - SizeofBezierPoint / 2, SizeofBezierPoint, SizeofBezierPoint));
+                    DrawnBezier.ForEach(point => e.Graphics.DrawRectangle(new Pen(Color.Black, 1), point.X - SizeofBezierPoint / 2, point.Y - SizeofBezierPoint / 2, SizeofBezierPoint, SizeofBezierPoint));
+                }
+                Path.ForEach(point => e.Graphics.FillEllipse(Brushes.Green, point.X - SizeofPoint / 2, point.Y - SizeofPoint / 2, SizeofPoint, SizeofPoint));
                 Path.ForEach(point => e.Graphics.DrawEllipse(new Pen(Color.Black, 1), point.X - SizeofPoint / 2, point.Y - SizeofPoint / 2, SizeofPoint, SizeofPoint));
             }
         }
@@ -183,6 +189,23 @@ namespace BezierSurname
             DrawnBezier.Clear();
             IsShowingStruct = true;
             Struct.Text = "Hide Structure";
+        }
+
+        private void BezierHelp_Click(object sender, EventArgs e)
+        {
+            if (IsShowingBezierHelp == true)
+            {
+                IsShowingBezierHelp = false;
+                BezierHelp.Text = "Show Bezier Help";
+                return;
+            }
+
+            if (IsShowingBezierHelp == false)
+            {
+                IsShowingBezierHelp = true;
+                BezierHelp.Text = "Hide Bezier Help";
+                return;
+            }
         }
     }
 }

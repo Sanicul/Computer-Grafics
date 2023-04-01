@@ -31,9 +31,8 @@ namespace BezierSurname
         {
             this.Struct = new System.Windows.Forms.Button();
             this.Clear = new System.Windows.Forms.Button();
+            this.BezierHelp = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            this.DoubleBuffered = true;
-
             // 
             // Struct
             // 
@@ -50,7 +49,7 @@ namespace BezierSurname
             // Clear
             // 
             this.Clear.Font = new System.Drawing.Font("Comic Sans MS", 10F);
-            this.Clear.Location = new System.Drawing.Point(12, 51);
+            this.Clear.Location = new System.Drawing.Point(12, 90);
             this.Clear.Name = "Clear";
             this.Clear.Size = new System.Drawing.Size(144, 29);
             this.Clear.TabIndex = 1;
@@ -58,13 +57,26 @@ namespace BezierSurname
             this.Clear.UseVisualStyleBackColor = true;
             this.Clear.Click += new System.EventHandler(this.Clear_Click);
             // 
+            // BezierHelp
+            // 
+            this.BezierHelp.Font = new System.Drawing.Font("Comic Sans MS", 10F);
+            this.BezierHelp.Location = new System.Drawing.Point(12, 51);
+            this.BezierHelp.Name = "BezierHelp";
+            this.BezierHelp.Size = new System.Drawing.Size(144, 33);
+            this.BezierHelp.TabIndex = 2;
+            this.BezierHelp.Text = "Hide Bezier Help";
+            this.BezierHelp.UseVisualStyleBackColor = true;
+            this.BezierHelp.Click += new System.EventHandler(this.BezierHelp_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1854, 930);
+            this.Controls.Add(this.BezierHelp);
             this.Controls.Add(this.Clear);
             this.Controls.Add(this.Struct);
+            this.DoubleBuffered = true;
             this.Name = "Form1";
             this.Text = "Form1";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -81,6 +93,7 @@ namespace BezierSurname
 
         private System.Windows.Forms.Button Struct;
         private System.Windows.Forms.Button Clear;
+        private System.Windows.Forms.Button BezierHelp;
     }
 }
 
